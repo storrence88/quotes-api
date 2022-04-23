@@ -33,6 +33,12 @@ gem "jbuilder"
 # Use Redis adapter to run Action Cable in production
 gem "redis", "~> 4.0"
 
+# API
+gem 'grape'
+gem 'grape-middleware-logger'
+gem 'grape-swagger-rails'
+gem 'jsonapi-serializer'
+
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
