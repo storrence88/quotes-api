@@ -5,6 +5,7 @@ module QuoteApp
     class Authenticated < Grape::API
       before { authenticate! }
 
+      mount QuoteApp::V1::Resources::Users
     end
   end
 end

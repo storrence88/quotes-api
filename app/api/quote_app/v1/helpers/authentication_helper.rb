@@ -8,14 +8,16 @@ module QuoteApp
         #
         # @return [User] currently logged in user
         def current_user
-          @current_user ||= User.find_by(auth_token: auth_token) if auth_token
+          @current_user ||= User.find_by(jti: auth_token) if auth_token
         end
 
         # Auth token sent as header or param
         #
         # @return [String] auth token
         def auth_token
-          @auth_token ||= env['HTTP_AUTHORIZATION'] || params[:token] || params[:api_key]
+          # @auth_token ||= env['HTTP_AUTHORIZATION'] || params[:token] || params[:api_key]
+          @auth_token ||= Warden::JWTAuth::TokenDecoder.new.call(request.headers['Authorization'].gsub('Bearer ', ''))
+          @auth_token&.dig('jti')
         end
 
         # Tries to login in a user and raises an error
@@ -23,7 +25,7 @@ module QuoteApp
         #
         # @return [Error] if current user not available
         def authenticate!
-          error!('unauthorized', 401) unless current_user
+          error!('Unauthorized request. Please login.', 401) unless current_user
         end
       end
     end
